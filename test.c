@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <windows.h>
-
+//----------------------------------------定义结构体----------------------------------------
 typedef struct birthday {
     int year;
     int month;
@@ -18,24 +18,24 @@ typedef struct Students {
     char phone[12];
     char email[30];
 } ss;
-
+//-----------------------------------------声明函数-----------------------------------------
 void find();
 void show();
 void sort(FILE *);
 void change(ss *, ss *);
-//-------------------------------------------------------------------------------------------
+//-----------------------------------------主函数--------------------------------------------
 int main()
 {
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
     // show();
-    printf("\nAfter sort:\n\n");
-
-    FILE *fp = fopen("students.txt", "r+");
-    sort(fp);
-    fclose(fp);
-    show();
+    // printf("\nAfter sort:\n");
+    // FILE *fp = fopen("students.txt", "r+");
+    // sort(fp);
+    // fclose(fp);
+    find();
     return 0;
 }
-//-------------------------------------------------------------------------------------------
+//-----------------------------------------定义函数------------------------------------------
 void show() {
     printf("┏━━━━━┳━━━┳━━┳━━┳━━━━━┳━━━━━━┓\n");
     printf("┃   学号   ┃ 姓名 ┃性别┃年龄┃ 出生日期 ┃    电话    ┃\n");
@@ -53,7 +53,6 @@ void show() {
 	    printf("%-6s", student.name);
 	    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
 	    printf("┃ %2s ┃ %2d ┃%4d-%02d-%02d┃%11s ┃\n", student.sex, student.age, student.birth.year, student.birth.month, student.birth.day, student.phone);
-	    // printf("┃%10s┃%-6s┃ %2s ┃ %2d ┃%4d-%02d-%02d┃%11s ┃\n", student.number, student.n《Web前端开发最佳实践》ame, student.sex, student.age, student.birth.year, student.birth.month, student.birth.day, student.phone);
 	    printf("┣━━━┳━┻━━━┻━━┻━━┻━━━━━┻━━━━━━┫\n");
 	    printf("┃地址: ┃%-48s┃\n", student.address);
 	    printf("┣━━━╋━━━━━━━━━━━━━━━━━━━━━━━━┫\n");
@@ -89,9 +88,7 @@ void find() {
 		} while(choose < 0 || choose > 2);
 		scanf("%s", findstr);
 		fflush(stdin);
-
         fread(&student, sizeof(student), 1, fp);
-
         while(!feof(fp)) {
 	        char* student_info = (choose == 1) ? student.number : student.name;
 	        if(0 == strcmp(student_info, findstr)) {
@@ -119,69 +116,31 @@ void find() {
     	}
 	    if(!find) {
 	    	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
-		    printf("***未找到***\n");
+		    printf("\n***未找到***\n\n");
 		    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
 	    }
 	    rewind(fp);
 	    find = 0;
 	} while(choose > 0 && choose <= 2);
 	fclose(fp);
-
-    // scanf("%s", number);
-    // while(!feof(fp)) {
-    //     fread(&student, sizeof(student), 1, fp);
-    //     if(0 == strcmp(student.number, findstr)) {
-    //         fseek(fp, -sizeof(student), 1);
-    //         printf("┏━━━━━┳━━━┳━━┳━━┳━━━━━┳━━━━━━┓\n");
-		  //   printf("┃   学号   ┃ 姓名 ┃性别┃年龄┃ 出生日期 ┃    电话    ┃\n");
-		  //   printf("┣━━━━━╋━━━╋━━╋━━╋━━━━━╋━━━━━━┫\n");
-		  //   printf("┃");
-		  //   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 14);
-		  //   printf("%10s", student.number);
-		  //   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
-		  //   printf("┃");
-		  //   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 12);
-		  //   printf("%-6s", student.name);
-		  //   SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 11);
-		  //   printf("┃ %2s ┃ %2d ┃%4d-%02d-%02d┃%11s ┃\n", student.sex, student.age, student.birth.year, student.birth.month, student.birth.day, student.phone);
-		  //   printf("┣━━━┳━┻━━━┻━━┻━━┻━━━━━┻━━━━━━┫\n");
-		  //   printf("┃地址: ┃%-48s┃\n", student.address);
-		  //   printf("┣━━━╋━━━━━━━━━━━━━━━━━━━━━━━━┫\n");
-		  //   printf("┃邮件: ┃%-48s┃\n", student.email);
-		  //   printf("┗━━━┻━━━━━━━━━━━━━━━━━━━━━━━━┛\n");
-		  //   find = 1;
-		  //   break;
-    //     }
-    //     // printf("running\n");
-    // }
-    // if(!find)
-    // 	printf("未找到\n");
-    // fclose(fp);
 }
 void sort(FILE *fp) {
     ss student, students[50];
     int i, j, k;
     fread(&student, sizeof(student), 1, fp);
-
     for(i = 0; !(feof(fp)); i++) { //将文件中的结构体读入内存
         students[i] = student;
-        printf("test2 + %s\n", students[i].number);
         fread(&student, sizeof(student), 1, fp);
     }
-
-    printf("test3\n");
     for(j = i - 1; j > 0; j--) { // 将结构体在内存中排序
         for(k = 0; k < j; k++) {
             if(strcmp(students[k].number, students[k + 1].number) > 0) {
                 change(&students[k], &students[k + 1]);
-                printf("change\n");
             }
         }
     }
-    printf("test4\n");
     rewind(fp);
     for(j = 0; j < i; j++) {
-        printf("%s\n", students[j].number);
         fwrite(&students[j], sizeof(student), 1, fp);
     }
 }
