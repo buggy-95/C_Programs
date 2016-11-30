@@ -22,17 +22,17 @@ typedef struct Students {
 void find();
 void show();
 void sort(FILE *);
-void change(ss, ss);
+void change(ss *, ss *);
 //-------------------------------------------------------------------------------------------
 int main()
 {
-    show();
-    // printf("\nAfter sort:\n\n");
-
-    // FILE *fp = fopen("students.txt", "w");
-    // sort(fp);
-    // fclose(fp);
     // show();
+    printf("\nAfter sort:\n\n");
+
+    FILE *fp = fopen("students.txt", "r+");
+    sort(fp);
+    fclose(fp);
+    show();
     return 0;
 }
 //-------------------------------------------------------------------------------------------
@@ -162,26 +162,31 @@ void sort(FILE *fp) {
     ss student, students[50];
     int i, j, k;
     fread(&student, sizeof(student), 1, fp);
+
     for(i = 0; !(feof(fp)); i++) { //将文件中的结构体读入内存
         students[i] = student;
-        printf("test2\n");
+        printf("test2 + %s\n", students[i].number);
         fread(&student, sizeof(student), 1, fp);
     }
+
     printf("test3\n");
     for(j = i - 1; j > 0; j--) { // 将结构体在内存中排序
         for(k = 0; k < j; k++) {
             if(strcmp(students[k].number, students[k + 1].number) > 0) {
-                change(students[k], students[k + 1]);
+                change(&students[k], &students[k + 1]);
+                printf("change\n");
             }
         }
     }
     printf("test4\n");
+    rewind(fp);
     for(j = 0; j < i; j++) {
+        printf("%s\n", students[j].number);
         fwrite(&students[j], sizeof(student), 1, fp);
     }
 }
-void change(ss a, ss b) {
-    ss c = a;
-    a = b;
-    b = c;
+void change(ss *a, ss *b) {
+    ss c = *a;
+    *a = *b;
+    *b = c;
 }
