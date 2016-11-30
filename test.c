@@ -21,12 +21,21 @@ typedef struct Students {
 
 void find();
 void show();
-int iseof(FILE *);
+void sort(FILE *);
+void change(ss, ss);
+//-------------------------------------------------------------------------------------------
 int main()
 {
-    find();
+    show();
+    // printf("\nAfter sort:\n\n");
+
+    // FILE *fp = fopen("students.txt", "w");
+    // sort(fp);
+    // fclose(fp);
+    // show();
     return 0;
 }
+//-------------------------------------------------------------------------------------------
 void show() {
     printf("┏━━━━━┳━━━┳━━┳━━┳━━━━━┳━━━━━━┓\n");
     printf("┃   学号   ┃ 姓名 ┃性别┃年龄┃ 出生日期 ┃    电话    ┃\n");
@@ -149,13 +158,30 @@ void find() {
     // 	printf("未找到\n");
     // fclose(fp);
 }
-int iseof(FILE *fp) {
-	fseek(fp, 1L, 1);
-	if(feof(fp)) {
-		fseek(fp, -1L, 1);
-		return 1;
-	} else {
-		fseek(fp, -1L, 1);
-		return 0;
-	}
+void sort(FILE *fp) {
+    ss student, students[50];
+    int i, j, k;
+    fread(&student, sizeof(student), 1, fp);
+    for(i = 0; !(feof(fp)); i++) { //将文件中的结构体读入内存
+        students[i] = student;
+        printf("test2\n");
+        fread(&student, sizeof(student), 1, fp);
+    }
+    printf("test3\n");
+    for(j = i - 1; j > 0; j--) { // 将结构体在内存中排序
+        for(k = 0; k < j; k++) {
+            if(strcmp(students[k].number, students[k + 1].number) > 0) {
+                change(students[k], students[k + 1]);
+            }
+        }
+    }
+    printf("test4\n");
+    for(j = 0; j < i; j++) {
+        fwrite(&students[j], sizeof(student), 1, fp);
+    }
+}
+void change(ss a, ss b) {
+    ss c = a;
+    a = b;
+    b = c;
 }
