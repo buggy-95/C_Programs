@@ -10,9 +10,9 @@ typedef struct birthday {
 typedef struct Students {
   char number[20];
   char name[10];
-  int age;
+  int  age;
   char sex[4];
-  bir birth;
+  bir  birth;
   char address[50];
   char phone[12];
   char email[30];
@@ -24,7 +24,7 @@ void show(); //------------信息显示
 void find(); //------------信息查找
 void sort(); //------------信息排序
 void change(ss *, ss *); //交换数据
-int no_data(); //----------判断空文件
+int  no_data(); //----------判断空文件
 void warn(int, const char *); //-输入错误提示
 void print_head(); //------打印表头
 void print_body(ss); //----打印表体
